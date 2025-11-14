@@ -27,6 +27,8 @@ echo "[create_display.sh] X server PID: ${X_PID}"
 
 ############################### start xfce with dummy display ###############################
 # Set display for dummy X server
+sleep 5
+ 
 export DISPLAY=${DISPLAY_ID}
 
 # Allow local user to access X server
