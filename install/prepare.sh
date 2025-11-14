@@ -1,16 +1,17 @@
 #!/bin/bash
 
+echo "[prepare.sh] Updating package lists"
 sudo apt update
 
-## expect install
+echo "[prepare.sh] Installing expect (required for x11vnc password automation)"
 sudo apt install expect -y
 
-## dummy video driver install
+echo "[prepare.sh] Installing dummy video driver (xserver-xorg-video-dummy)"
 sudo apt install -y xserver-xorg-video-dummy
 
-## xfce4 install
+echo "[prepare.sh] Installing XFCE4 desktop and dependencies"
 sudo apt install -y xfce4 xfce4-goodies dbus-x11
 
-## x11vnc install
+echo "[prepare.sh] Installing x11vnc server"
 sudo apt install x11vnc -y
 

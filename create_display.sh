@@ -7,6 +7,9 @@ DISPLAY_ID="${1:-:0}"
 DISPLAY_NUM="${DISPLAY_ID#:}"  # Remove ':' prefix
 VNC_PORT=$((5900 + DISPLAY_NUM))
 
+echo "[create_display.sh] Selected display: ${DISPLAY_ID} (number ${DISPLAY_NUM})"
+echo "[create_display.sh] Calculated VNC port: ${VNC_PORT}"
+
 ################################ start dummy Xorg server ###############################
 # Start Xorg with dummy configuration
 
@@ -15,7 +18,11 @@ mkdir -p "${XORG_LOG_DIR}"
 X_LOG="${XORG_LOG_DIR}/${DISPLAY_NUM}.log"
 
 # Start Xorg with dummy configuration and redirect output to per-display log (background)
+echo "[create_display.sh] Starting X server on ${DISPLAY_ID}; logging to ${X_LOG}"
 /usr/bin/X ${DISPLAY_ID} -config /etc/X11/xorg.conf > "${X_LOG}" 2>&1 &
+
+X_PID=$!
+echo "[create_display.sh] X server PID: ${X_PID}"
 
 
 ############################### start xfce with dummy display ###############################
@@ -26,18 +33,26 @@ export DISPLAY=${DISPLAY_ID}
 xhost +SI:localuser:$USER
 
 # Start XFCE in background (non-blocking) with per-display log directory
-# Ensure the log directory exists and write to /tmp/xfce/{DISPLAY_NUM}.log
+echo "[create_display.sh] Preparing XFCE log directory and starting XFCE"
 XFCE_LOG_DIR="/tmp/xfce"
 mkdir -p "${XFCE_LOG_DIR}"
 XFCE_LOG="${XFCE_LOG_DIR}/${DISPLAY_NUM}.log"
+echo "[create_display.sh] XFCE log: ${XFCE_LOG}"
 startxfce4 > "${XFCE_LOG}" 2>&1 &
+XFCE_PID=$!
+echo "[create_display.sh] XFCE PID: ${XFCE_PID}"
 
 
 ############################### start x11vnc server ###############################
+
+echo "[create_display.sh] Preparing x11vnc log directory and starting x11vnc"
 X11VNC_LOG_DIR="/tmp/x11vnc"
 mkdir -p "${X11VNC_LOG_DIR}"
 X11VNC_LOG="${X11VNC_LOG_DIR}/${DISPLAY_NUM}.log"
+echo "[create_display.sh] x11vnc log: ${X11VNC_LOG}"
 x11vnc -shared -forever -nodpms -noxdamage -rfbport ${VNC_PORT} -display ${DISPLAY_ID} -bg -o "${X11VNC_LOG}" -rfbauth /home/$USER/.vnc/passwd
+X11VNC_PID=$!
+echo "[create_display.sh] x11vnc PID: ${X11VNC_PID}"
 
 
 # Print final connection info for the user
