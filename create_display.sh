@@ -19,7 +19,7 @@ X_LOG="${XORG_LOG_DIR}/${DISPLAY_NUM}.log"
 
 # Start Xorg with dummy configuration and redirect output to per-display log (background)
 echo "[create_display.sh] Starting X server on ${DISPLAY_ID}; logging to ${X_LOG}"
-/usr/bin/X ${DISPLAY_ID} -config /etc/X11/xorg.conf > "${X_LOG}" 2>&1 &
+sudo /usr/bin/X ${DISPLAY_ID} -config ./confs/xorg.conf > "${X_LOG}" 2>&1 &
 
 X_PID=$!
 echo "[create_display.sh] X server PID: ${X_PID}"
@@ -30,7 +30,7 @@ echo "[create_display.sh] X server PID: ${X_PID}"
 export DISPLAY=${DISPLAY_ID}
 
 # Allow local user to access X server
-xhost +SI:localuser:$USER
+sudo xhost +SI:localuser:$USER
 
 # Start XFCE in background (non-blocking) with per-display log directory
 echo "[create_display.sh] Preparing XFCE log directory and starting XFCE"
@@ -38,7 +38,8 @@ XFCE_LOG_DIR="/tmp/xfce"
 mkdir -p "${XFCE_LOG_DIR}"
 XFCE_LOG="${XFCE_LOG_DIR}/${DISPLAY_NUM}.log"
 echo "[create_display.sh] XFCE log: ${XFCE_LOG}"
-startxfce4 > "${XFCE_LOG}" 2>&1 &
+sudo startxfce4 > "${XFCE_LOG}" 2>&1 &
+
 XFCE_PID=$!
 echo "[create_display.sh] XFCE PID: ${XFCE_PID}"
 
@@ -50,7 +51,7 @@ X11VNC_LOG_DIR="/tmp/x11vnc"
 mkdir -p "${X11VNC_LOG_DIR}"
 X11VNC_LOG="${X11VNC_LOG_DIR}/${DISPLAY_NUM}.log"
 echo "[create_display.sh] x11vnc log: ${X11VNC_LOG}"
-x11vnc -shared -forever -nodpms -noxdamage -rfbport ${VNC_PORT} -display ${DISPLAY_ID} -bg -o "${X11VNC_LOG}" -rfbauth /home/$USER/.vnc/passwd
+sudo x11vnc -shared -forever -nodpms -noxdamage -rfbport ${VNC_PORT} -display ${DISPLAY_ID} -bg -o "${X11VNC_LOG}" -rfbauth /home/$USER/.vnc/passwd
 X11VNC_PID=$!
 echo "[create_display.sh] x11vnc PID: ${X11VNC_PID}"
 
