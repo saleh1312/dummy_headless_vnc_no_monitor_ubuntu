@@ -1,12 +1,6 @@
 #!/bin/bash
 
-
-## openssh
 sudo apt update
-sudo apt install openssh-server -y
-sudo systemctl enable ssh
-sudo systemctl start ssh
-
 
 ## expect install
 sudo apt install expect -y
