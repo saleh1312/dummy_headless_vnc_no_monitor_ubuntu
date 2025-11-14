@@ -40,3 +40,12 @@ X11VNC_LOG="${X11VNC_LOG_DIR}/${DISPLAY_NUM}.log"
 x11vnc -shared -forever -nodpms -noxdamage -rfbport ${VNC_PORT} -display ${DISPLAY_ID} -bg -o "${X11VNC_LOG}" -rfbauth /home/$USER/.vnc/passwd
 
 
+# Print final connection info for the user
+echo ""
+echo "VNC is listening on port: ${VNC_PORT}"
+echo "Display ID: ${DISPLAY_ID}"
+echo "X log: ${X_LOG}"
+echo "XFCE log: ${XFCE_LOG}"
+echo "x11vnc log: ${X11VNC_LOG}"
+
+
