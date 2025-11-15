@@ -29,4 +29,14 @@ kill_by_pattern "startxfce4"
 # Kill Xorg for this display
 kill_by_pattern "X.*${DISPLAY_ID}"
 
+
+
+
+# Disable and stop LightDM to prevent conflicts
+echo "[destroy_display.sh] Disabling and stopping LightDM to prevent conflicts"
+sudo systemctl disable lightdm
+sudo systemctl stop lightdm
+sudo systemctl mask lightdm
+
+
 echo "[destroy_display.sh] Cleanup complete."

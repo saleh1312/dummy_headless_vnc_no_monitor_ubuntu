@@ -15,3 +15,5 @@ sudo apt install -y xfce4 xfce4-goodies dbus-x11
 echo "[prepare.sh] Installing x11vnc server"
 sudo apt install x11vnc -y
 
+echo "[prepare.sh] Installing Firefox browser"
+sudo apt install firefox -y
